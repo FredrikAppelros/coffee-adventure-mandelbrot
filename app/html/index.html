@@ -1,13 +1,56 @@
 <html>
   <head>
     <title>Mandelbrot</title>
-    <link rel="stylesheet" href="../css/style.css" media="screen">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
     <script type="text/javascript" src="../lib/chroma.min.js" defer></script>
     <script type="text/javascript" src="../js/app.min.js" defer></script>
   </head>
   <body>
-    <div id="container">
-      <canvas id="canvas" width="700" height="400"></canvas>
+    <div id="app-container" class="container">
+      <div id="canvas-container">
+        <canvas id="canvas" width="700" height="400"></canvas>
+      </div>
+      <div id="controls">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="left" class="control-label col-sm-3">Left</label>
+            <div class="col-sm-9">
+              <input id="left" type="text" class="form-control" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="top" class="control-label col-sm-3">Top</label>
+            <div class="col-sm-9">
+              <input id="top" type="text" class="form-control" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="width" class="control-label col-sm-3">Width</label>
+            <div class="col-sm-9">
+              <input id="width" type="text" class="form-control" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="height" class="control-label col-sm-3">Height</label>
+            <div class="col-sm-9">
+              <input id="height" type="text" class="form-control" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="checkbox col-sm-offset-3 col-sm-9">
+              <label>
+                <input id="ratio" type="checkbox" checked> Keep aspect ratio
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button id="reset" type="button" class="btn btn-default">Reset region</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </body>
 </html>

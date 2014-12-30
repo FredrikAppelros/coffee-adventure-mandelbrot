@@ -13,7 +13,7 @@ class Renderer
 
   mandelbrot: (region, px, py) ->
     x0 = px / @width * region.width + region.left
-    y0 = py / @height * region.height + region.bottom
+    y0 = py / @height * region.height + region.top
     x = 0
     y = 0
 
@@ -67,18 +67,21 @@ class Renderer
 
     @ctx.putImageData @image, 0, 0
 
-container = document.getElementById 'container'
-canvas = document.getElementById 'canvas'
-overlay = document.createElement 'canvas'
-ctx = overlay.getContext '2d'
-renderer = new Renderer canvas
-
-region =
+defaultRegion =
   left: -2.5
-  bottom: -1
+  top: -1
   width: 3.5
   height: 2
 
+canvas = document.getElementById 'canvas'
+ratio = document.getElementById 'ratio'
+reset = document.getElementById 'reset'
+overlay = document.createElement 'canvas'
+
+ctx = overlay.getContext '2d'
+renderer = new Renderer canvas
+
+region = newRegion = defaultRegion
 keepRatio = true
 
 drawImage = ->
@@ -91,6 +94,34 @@ drawImage = ->
   console.log 'Time elapsed:', end - start, 'ms'
 
 startX = startY = endX = endY = 0
+
+getSelection = ->
+  x = Math.min endX, startX
+  y = Math.min endY, startY
+  w = Math.abs endX - startX
+  h = Math.abs endY - startY
+
+  [x, y, w, h]
+
+getRegion = (selection) ->
+  [x, y, w, h] = selection
+
+  newRegion =
+    left: x / overlay.width * region.width + region.left
+    top: y / overlay.height * region.height + region.top
+    width: w / overlay.width * region.width
+    height: h / overlay.height * region.height
+
+updateRegion = (region) ->
+  left = document.getElementById 'left'
+  top = document.getElementById 'top'
+  width = document.getElementById 'width'
+  height = document.getElementById 'height'
+
+  left.value = region.left
+  top.value = region.top
+  width.value = region.width
+  height.value = region.height
 
 onMouseDown = (event) ->
   startX = event.layerX
@@ -105,40 +136,27 @@ onMouseMove = (event) ->
   endY = event.layerY
 
   if keepRatio
-    ratio = canvas.width / canvas.height
+    ratio = overlay.width / overlay.height
 
     w = endX - startX
     h = endY - startY
 
-
-    if (Math.abs(w) / canvas.width) > (Math.abs(h) / canvas.height)
-      signX = w / Math.abs w
+    if (Math.abs(w) / overlay.width) > (Math.abs(h) / overlay.height)
+      signX = if w < 0 then -1 else 1
       endX = startX + Math.abs(h) * ratio * signX
     else
-      signY = h / Math.abs h
+      signY = if h < 0 then -1 else 1
       endY = startY + Math.abs(w) / ratio * signY
 
-  x = Math.min endX, startX
-  y = Math.min endY, startY
-  w = Math.abs endX - startX
-  h = Math.abs endY - startY
+  selection = getSelection()
+  updateRegion getRegion selection
+  [x, y, w, h] = selection
 
   ctx.clearRect 0, 0, overlay.width, overlay.height
   ctx.strokeRect x, y, w, h
 
 onMouseUp = (event) ->
-  x = Math.min endX, startX
-  y = Math.min endY, startY
-  w = Math.abs endX - startX
-  h = Math.abs endY - startY
-
   ctx.clearRect 0, 0, overlay.width, overlay.height
-
-  newRegion =
-    left: x / overlay.width * region.width + region.left
-    bottom: y / overlay.height * region.height + region.bottom
-    width: w / overlay.width * region.width
-    height: h / overlay.height * region.height
 
   region = newRegion
 
@@ -148,10 +166,22 @@ onMouseUp = (event) ->
   overlay.removeEventListener 'mousemove', onMouseMove
   overlay.removeEventListener 'mouseup', onMouseUp
 
+onRatioChange = ->
+  keepRatio = not keepRatio
+
+onResetClick = ->
+  region = defaultRegion
+  drawImage()
+  updateRegion region
+
 overlay.id = 'overlay'
 overlay.width = canvas.width
 overlay.height = canvas.height
-container.appendChild overlay
+canvas.parentNode.appendChild overlay
+
 overlay.addEventListener 'mousedown', onMouseDown
+ratio.addEventListener 'change', onRatioChange
+reset.addEventListener 'click', onResetClick
 
 drawImage()
+updateRegion region
