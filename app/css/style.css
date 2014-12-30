@@ -1,4 +1,19 @@
-#canvas {
-  display: block;
-  margin: auto;
+body {
+  text-align: center;
+}
+
+canvas {
+  cursor: crosshair;
+}
+
+#container {
+  display: inline-block;
+  position: relative;
+  border: 2px solid black;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
