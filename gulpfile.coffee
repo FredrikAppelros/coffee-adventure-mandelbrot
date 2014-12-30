@@ -1,6 +1,7 @@
 gulp = require 'gulp'
+browserify = require 'browserify'
+transform = require 'vinyl-transform'
 sourcemaps = require 'gulp-sourcemaps'
-coffee = require 'gulp-coffee'
 uglify = require 'gulp-uglify'
 concat = require 'gulp-concat'
 less = require 'gulp-less'
@@ -12,25 +13,23 @@ paths =
   html: 'app/html/**/*.html'
   coffee: 'src/coffee/**/*.coffee'
   less: 'src/less/**/*.less'
-  js: 'app/js'
   css: 'app/css'
 
-gulp.task 'server', ->
-  browserSync server:
-    baseDir: '.'
-    index: 'app/html/index.html'
-
-gulp.task 'reload', ->
-  browserSync.reload()
-
 gulp.task 'coffee', ->
-  gulp.src(paths.coffee)
-    .pipe(sourcemaps.init())
-      .pipe(coffee())
+  bundle = transform (files) ->
+    browserify(
+      entries: files
+      extensions: ['.coffee']
+      debug: true
+    ).bundle()
+
+  gulp.src('src/coffee/app.coffee')
+    .pipe(bundle)
+    .pipe(sourcemaps.init loadMaps: true)
       .pipe(uglify())
       .pipe(concat 'app.min.js')
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest paths.js)
+    .pipe(sourcemaps.write '.')
+    .pipe(gulp.dest 'app/js')
 
 gulp.task 'less', ->
   gulp.src(paths.less)
@@ -40,9 +39,23 @@ gulp.task 'less', ->
     .pipe(sourcemaps.write())
     .pipe(gulp.dest paths.css)
 
+gulp.task 'server', ['coffee', 'less'], ->
+  browserSync server:
+    baseDir: 'app'
+    index: 'html/index.html'
+
+gulp.task 'reload', ->
+  browserSync.reload()
+
+gulp.task 'reload-coffee', ['coffee'], ->
+  browserSync.reload()
+
+gulp.task 'reload-less', ['less'], ->
+  browserSync.reload()
+
 gulp.task 'watch', ->
   gulp.watch paths.html, ['reload']
-  gulp.watch paths.coffee, ['coffee', 'reload']
-  gulp.watch paths.less, ['less', 'reload']
+  gulp.watch paths.coffee, ['reload-coffee']
+  gulp.watch paths.less, ['reload-less']
 
-gulp.task 'default', ['watch', 'coffee', 'less', 'server']
+gulp.task 'default', ['watch', 'server']
