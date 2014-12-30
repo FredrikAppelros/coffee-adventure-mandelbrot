@@ -13,8 +13,8 @@ paths =
 
 gulp.task 'server', ->
   browserSync server:
-    baseDir: 'app'
-    index: 'html/index.html'
+    baseDir: '.'
+    index: 'app/html/index.html'
 
 gulp.task 'reload', ->
   browserSync.reload()

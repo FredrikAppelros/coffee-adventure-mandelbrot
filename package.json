@@ -1,10 +1,11 @@
 {
   "name": "lab1",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Introduction to programming - laboration 1",
   "author": "Fredrik Appelros",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.3.12",
     "browser-sync": "^1.8.2",
     "coffee-script": "^1.8.0",
     "gulp": "^3.8.10",
