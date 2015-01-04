@@ -6,7 +6,8 @@
   "license": "ISC",
   "browserify": {
     "transform": [
-      "coffeeify"
+      "coffeeify",
+      "workerify"
     ]
   },
   "devDependencies": {
@@ -22,7 +23,8 @@
     "gulp-uglify": "^1.0.2",
     "less-plugin-autoprefix": "^1.1.0",
     "less-plugin-clean-css": "^1.4.0",
-    "vinyl-transform": "^1.0.0"
+    "vinyl-transform": "^1.0.0",
+    "workerify": "^0.3.0"
   },
   "dependencies": {
     "chroma-js": "^0.6.3"

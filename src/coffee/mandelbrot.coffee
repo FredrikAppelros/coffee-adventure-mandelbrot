@@ -1,9 +1,8 @@
 chroma = require 'chroma-js'
+events = require 'events'
 
-class Renderer
-  constructor: (canvas, @maxItr = 1000, @palette = chroma.scale 'RdYlBu') ->
-    @ctx = canvas.getContext '2d'
-    @image = @ctx.createImageData canvas.width, canvas.height
+class Renderer extends events.EventEmitter
+  constructor: (@image, @maxItr = 1000, @palette = chroma.scale 'RdYlBu') ->
     @width = @image.width
     @height = @image.height
     @numPixels = @width * @height
@@ -63,9 +62,16 @@ class Renderer
         @values[y * @width + x] = v
         @hgram[Math.round v]++
 
+    lastProgress = 0
     for i in [0...@numPixels]
       @renderPixel i
 
-    @ctx.putImageData @image, 0, 0
+      if i % 100 == 0
+        currentProgress = Math.round 100 * i / @numPixels
+        if currentProgress > lastProgress
+          @emit 'progress', currentProgress
+          lastProgress = currentProgress
+
+    @image
 
 exports.Renderer = Renderer
