@@ -10,8 +10,7 @@ class Renderer
     @colorCache = {}
 
     # Set the alpha channel for all pixels in the image
-    for i in [0...@numPixels]
-      @image.data[i * 4 + 3] = 255
+    @image.data[i * 4 + 3] = 255 for i in [0...@numPixels]
 
   mandelbrot: (region, px, py) ->
     x0 = px / @width * region.width + region.left
