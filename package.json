@@ -1,7 +1,7 @@
 {
-  "name": "lab1",
+  "name": "mandelbrot",
   "version": "0.0.0",
-  "description": "Introduction to programming - laboration 1",
+  "description": "Mandelbrot",
   "author": "Fredrik Appelros",
   "license": "ISC",
   "browserify": {
