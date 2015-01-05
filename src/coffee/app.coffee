@@ -3,5 +3,5 @@ region = require './region'
 zoom = require './zoom'
 controls = require './controls'
 
-renderer.drawImage()
+renderer.renderImage()
 controls.updateControls region.currentRegion

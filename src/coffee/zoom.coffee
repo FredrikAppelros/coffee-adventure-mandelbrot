@@ -67,7 +67,7 @@ onMouseUp = (event) ->
 
   region.currentRegion = region.selectedRegion
 
-  renderer.drawImage()
+  renderer.renderImage()
 
   overlay.addEventListener 'mousedown', onMouseDown
   overlay.removeEventListener 'mousemove', onMouseMove

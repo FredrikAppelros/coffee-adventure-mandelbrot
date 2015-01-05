@@ -9,10 +9,13 @@ onmessage = (event) ->
   [type, data] = event.data
   switch type
     when 'create'
-      renderer = new mandelbrot.Renderer data
+      renderer = new mandelbrot.Renderer data.image, data.maxItr
       renderer.on 'progress', onProgress
+    when 'calculate'
+      values = renderer.calculateRegion data
+      postMessage ['result', values]
     when 'render'
       image = renderer.renderImage data
-      postMessage ['render', image]
+      postMessage ['done', image]
 
 self.onmessage = onmessage

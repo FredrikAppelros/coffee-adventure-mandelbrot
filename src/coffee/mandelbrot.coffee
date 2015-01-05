@@ -31,7 +31,18 @@ class Renderer extends events.EventEmitter
 
     itr - 1
 
-  renderPixel: (idx) ->
+  calculateRegion: (region) ->
+    @values = []
+    for y in [0...@height]
+      for x in [0...@width]
+        v = @mandelbrot region, x, y
+        @values[y * @width + x] = v
+
+    @values
+
+  renderPixel: (hgram, idx) ->
+    norm = hgram.reduce (p, c) -> p + c
+
     v = @values[idx]
     c = @colorCache[v]
 
@@ -40,10 +51,10 @@ class Renderer extends events.EventEmitter
       phue = hue = 0
       for i in [0..level]
         phue = hue
-        hue += @hgram[i]
+        hue += hgram[i]
 
-      c1 = @palette(phue / @numPixels)
-      c2 = @palette(hue / @numPixels)
+      c1 = @palette(phue / norm)
+      c2 = @palette(hue / norm)
       c = chroma(chroma.interpolate c1, c2, v % 1)
       @colorCache[v] = c
 
@@ -52,19 +63,10 @@ class Renderer extends events.EventEmitter
     @image.data[idx * 4 + 1] = g
     @image.data[idx * 4 + 2] = b
 
-  renderImage: (region) ->
-    @values = new Array @numPixels
-    @hgram = (0 for i in [0...@maxItr])
-
-    for y in [0...@height]
-      for x in [0...@width]
-        v = @mandelbrot region, x, y
-        @values[y * @width + x] = v
-        @hgram[Math.round v]++
-
+  renderImage: (hgram) ->
     lastProgress = 0
     for i in [0...@numPixels]
-      @renderPixel i
+      @renderPixel hgram, i
 
       if i % 100 == 0
         currentProgress = Math.round 100 * i / @numPixels

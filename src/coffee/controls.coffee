@@ -21,7 +21,7 @@ onRatioChange = ->
 
 onResetClick = ->
   region.currentRegion = region.defaultRegion
-  renderer.drawImage()
+  renderer.renderImage()
   updateControls region.currentRegion
 
 ratio.addEventListener 'change', onRatioChange
