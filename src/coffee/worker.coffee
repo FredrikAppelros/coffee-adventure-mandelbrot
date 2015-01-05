@@ -1,4 +1,4 @@
-mandelbrot = require './mandelbrot.coffee'
+mandelbrot = require './mandelbrot'
 
 renderer = undefined
 

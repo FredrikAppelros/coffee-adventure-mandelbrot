@@ -7,7 +7,7 @@ progress = document.getElementById 'progress'
 ctx = canvas.getContext '2d'
 image = ctx.createImageData canvas.width, canvas.height
 
-worker = new Worker './worker.coffee'
+worker = new Worker 'js/worker.min.js'
 worker.postMessage ['create', image]
 
 start = 0
