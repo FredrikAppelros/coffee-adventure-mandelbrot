@@ -1,4 +1,3 @@
-mandelbrot = require './mandelbrot'
 region = require './region'
 
 canvas = document.getElementById 'canvas'
