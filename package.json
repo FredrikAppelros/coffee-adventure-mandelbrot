@@ -1,9 +1,6 @@
 {
   "name": "mandelbrot",
-  "version": "0.0.0",
-  "description": "Mandelbrot",
-  "author": "Fredrik Appelros",
-  "license": "ISC",
+  "private": true,
   "browserify": {
     "transform": [
       "coffeeify"
