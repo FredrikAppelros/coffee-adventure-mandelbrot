@@ -5,7 +5,6 @@ sourcemaps = require 'gulp-sourcemaps'
 uglify = require 'gulp-uglify'
 rename = require 'gulp-rename'
 less = require 'gulp-less'
-autoprefix = new (require 'less-plugin-autoprefix')
 cleancss = new (require 'less-plugin-clean-css')
 browserSync = require 'browser-sync'
 
@@ -38,7 +37,7 @@ gulp.task 'coffee', ->
 gulp.task 'less', ->
   gulp.src(paths.less)
     .pipe(sourcemaps.init())
-      .pipe(less plugins: [autoprefix, cleancss])
+      .pipe(less plugins: [cleancss])
       .pipe(rename extname: '.min.css')
     .pipe(sourcemaps.write())
     .pipe(gulp.dest paths.css)
