@@ -6,6 +6,9 @@
       "coffeeify"
     ]
   },
+  "scripts": {
+    "prepublish": "coffee scripts/prepublish.coffee"
+  },
   "devDependencies": {
     "bower": "^1.3.12",
     "browser-sync": "^1.8.2",
