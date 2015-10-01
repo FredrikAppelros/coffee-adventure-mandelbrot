@@ -66,7 +66,7 @@ class Renderer extends events.EventEmitter
     for i in [0...@numPixels]
       @renderPixel i
 
-      if i % 100 == 0
+      if i % 100 is 0
         currentProgress = Math.round 100 * i / @numPixels
         if currentProgress > lastProgress
           @emit 'progress', currentProgress
